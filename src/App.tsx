@@ -1,9 +1,9 @@
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
+
 const App = () => {
-  return (
-    <div>
-      <h1 className="text-3xl font-bold text-center underline">App</h1>
-    </div>
-  );
+  //localiza as paginas
+  return <RouterProvider router={router} />;
 };
 
 export default App;
