@@ -11,20 +11,35 @@ const Home = () => {
 
   const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const COUNT: number = 8;
+  const [offset, setOffset] = useState<number>(0);
+
+  function filteredBooks(data: any) {
+    return data.docs.map((book: any) => ({
+      title: book.title,
+      cover_i: book.cover_i,
+      key: book.key,
+    }));
+  }
 
   function handleSearch(query: string) {
     if (!query) return;
-    getData(query);
+    setSearch(query);
+    setOffset(0); // Resetando offset ao procurar no input
+    getData(query, 0); // Passando 0 como offset inicial
   }
 
   const BASE_URL = "https://openlibrary.org";
 
-  const getData = async (query: string) => {
+  const getData = async (query: string, offset: number) => {
     setError(null); // Limpa erro anterior
+    setLoading(true);
 
     try {
       const response = await fetch(
-        `${BASE_URL}/search.json?q=${query}&limit=1`
+        `${BASE_URL}/search.json?q=${query}&limit=${COUNT}&offset=${offset}`
       );
 
       if (!response.ok) {
@@ -33,16 +48,24 @@ const Home = () => {
 
       const data = await response.json();
 
-      const filteredBooks = data.docs.map((book: any) => ({
-        title: book.title,
-        cover_i: book.cover_i,
-        key: book.key,
-      }));
-
-      setBooks(filteredBooks);
-      console.log(filteredBooks);
+      setBooks(filteredBooks(data));
+      setLoading(false);
     } catch (error) {
       setError("Erro ao buscar os livros");
+    }
+  };
+
+  const handlePrevious = () => {
+    if (offset > 0) {
+      setOffset(offset - COUNT);
+      getData(search, offset - COUNT);
+    }
+  };
+
+  const handleNext = () => {
+    if (offset < 16) {
+      setOffset(offset + COUNT);
+      getData(search, offset + COUNT);
     }
   };
 
@@ -51,7 +74,36 @@ const Home = () => {
       <Search handleSearchFunc={handleSearch} />
 
       {error && <div className="error">{error}</div>}
-      <ViewBooks books={books} />
+      <ViewBooks books={books} loading={loading} />
+
+      {books.length > 0 && (
+        <div className="flex justify-between w-1/2 m-auto text-center p-5">
+          <button
+            onClick={handlePrevious}
+            aria-label="Anterior"
+            disabled={offset === 0}
+            className={`px-4 py-2 text-white font-semibold rounded-lg transition-all duration-300 ${
+              offset === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+            }`}
+          >
+            &#8592; Anterior
+          </button>
+          <button
+            onClick={handleNext}
+            aria-label="Próximo"
+            disabled={offset >= 16 || books.length < COUNT}
+            className={`px-4 py-2 text-white font-semibold rounded-lg transition-all duration-300 ${
+              offset >= 16 || books.length < COUNT
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+            }`}
+          >
+            Próximo &#8594;
+          </button>
+        </div>
+      )}
     </div>
   );
 };

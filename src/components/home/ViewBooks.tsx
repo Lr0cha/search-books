@@ -7,9 +7,10 @@ interface Book {
 
 interface ViewBooksProps {
   books: Book[];
+  loading: Boolean;
 }
 
-const ViewBooks = ({ books }: ViewBooksProps) => {
+const ViewBooks = ({ books, loading }: ViewBooksProps) => {
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
@@ -17,7 +18,7 @@ const ViewBooks = ({ books }: ViewBooksProps) => {
           books.map((book) => (
             <div
               key={book.key}
-              className="flex flex-col items-center bg-blue-50 0 rounded-lg shadow-lg overflow-hidden p-6 transform hover:scale-105 transition-all duration-300"
+              className="flex flex-col items-center bg-blue-50 rounded-lg shadow-lg overflow-hidden p-6 transform hover:scale-105 transition-all duration-300"
             >
               {book.cover_i && (
                 <img
@@ -41,10 +42,18 @@ const ViewBooks = ({ books }: ViewBooksProps) => {
           ))}
       </div>
 
-      {books.length === 0 && (
+      {books.length === 0 && !loading && (
         <div className="flex justify-center h-screen border-4 border-blue-300 bg-white p-6 rounded-lg">
-          <p className="text-center text-gray-600 sm:text-lg md:text-xl lg:text-3xl font-semibold text-blue-800">
+          <p className="text-center text-gray-600 sm:text-lg md:text-xl lg:text-3xl font-semibold">
             Nenhum livro encontrado no momento...
+          </p>
+        </div>
+      )}
+
+      {loading && (
+        <div className="flex justify-center h-screen border-4 border-blue-300 bg-white p-6 rounded-lg">
+          <p className="text-center text-gray-600 sm:text-lg md:text-xl lg:text-3xl font-semibold">
+            Carregando ...
           </p>
         </div>
       )}
