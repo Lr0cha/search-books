@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Search from "../../components/home/Search";
+import ViewBooks from "../../components/home/ViewBooks";
 
 const Home = () => {
   interface Book {
@@ -46,10 +47,11 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen p-2">
+    <div className="min-h-screen p-2 gap-3">
       <Search handleSearchFunc={handleSearch} />
 
       {error && <div className="error">{error}</div>}
+      <ViewBooks books={books} />
     </div>
   );
 };
