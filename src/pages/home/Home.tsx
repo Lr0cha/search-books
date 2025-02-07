@@ -13,7 +13,7 @@ const Home = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
-  const COUNT: number = 8;
+  const COUNT: number = 10;
   const [offset, setOffset] = useState<number>(0);
 
   function filteredBooks(data: any) {
@@ -63,7 +63,7 @@ const Home = () => {
   };
 
   const handleNext = () => {
-    if (offset < 16) {
+    if (offset < 20) {
       setOffset(offset + COUNT);
       getData(search, offset + COUNT);
     }
@@ -80,7 +80,6 @@ const Home = () => {
         <div className="flex justify-between w-1/2 m-auto text-center p-5">
           <button
             onClick={handlePrevious}
-            aria-label="Anterior"
             disabled={offset === 0}
             className={`px-4 py-2 text-white font-semibold rounded-lg transition-all duration-300 ${
               offset === 0
@@ -88,19 +87,18 @@ const Home = () => {
                 : "bg-blue-500 hover:bg-blue-600"
             }`}
           >
-            &#8592; Anterior
+            &#8592;
           </button>
           <button
             onClick={handleNext}
-            aria-label="Próximo"
-            disabled={offset >= 16 || books.length < COUNT}
+            disabled={offset >= 20 || books.length < COUNT}
             className={`px-4 py-2 text-white font-semibold rounded-lg transition-all duration-300 ${
-              offset >= 16 || books.length < COUNT
+              offset >= 20 || books.length < COUNT
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-600"
             }`}
           >
-            Próximo &#8594;
+            &#8594;
           </button>
         </div>
       )}
