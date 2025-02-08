@@ -1,9 +1,5 @@
-interface Book {
-  title: string;
-  author_name?: string[];
-  cover_i?: number;
-  key: string;
-}
+import { Link } from "react-router-dom";
+import { Book } from "../../pages/home/Home";
 
 interface ViewBooksProps {
   books: Book[];
@@ -33,14 +29,11 @@ const ViewBooks = ({ books, loading }: ViewBooksProps) => {
               )}
 
               <div className="p-4">
-                <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-all duration-300">
-                  {book.title}
-                </h3>
-                {book.author_name && (
-                  <p className="mt-2 text-sm text-gray-700">
-                    {book.author_name.join(", ")}
-                  </p>
-                )}
+                <Link to={`/detail${book.key}`}>
+                  <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-all duration-300">
+                    {book.title}
+                  </h3>
+                </Link>
               </div>
             </div>
           ))}

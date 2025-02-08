@@ -2,13 +2,13 @@ import { useState } from "react";
 import Search from "../../components/home/Search";
 import ViewBooks from "../../components/home/ViewBooks";
 
-const Home = () => {
-  interface Book {
-    title: string;
-    cover_i?: number;
-    key: string; // ID único do livro
-  }
+export interface Book {
+  title: string;
+  cover_i?: number;
+  key: string; // ID único do livro
+}
 
+const Home = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
