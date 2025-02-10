@@ -8,7 +8,7 @@ export interface Author {
 
 export interface BookDetail {
   title: string;
-  description?: string;
+  desc?: string;
   covers: number[];
   authors: { author: { key: string } }[];
 }
@@ -38,7 +38,7 @@ const Detail = () => {
     const fetchBookDetails = async () => {
       setLoading(true);
       setError(null);
-
+      let desc: string = "";
       try {
         const response = await fetch(
           `https://openlibrary.org/works/${key}.json`
@@ -46,7 +46,18 @@ const Detail = () => {
         if (!response.ok) throw new Error("Erro ao buscar detalhes do livro.");
 
         const data = await response.json();
-        setBook(data);
+
+        if (data.description) {
+          if (typeof data.description === "string") {
+            desc = data.description;
+          } else if (data.description.value) {
+            desc = data.description.value;
+          }
+        }
+        setBook({
+          ...data,
+          desc,
+        });
 
         if (data.authors && data.authors.length > 0) {
           findAuthor(data);
@@ -54,14 +65,20 @@ const Detail = () => {
       } catch (error) {
         setError("Erro ao buscar os detalhes do livro.");
       } finally {
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       }
     };
-
     fetchBookDetails();
   }, [key]);
 
-  if (loading) return <div className="text-center">Carregando...</div>;
+  if (loading)
+    return (
+      <div className="text-center text-gray-700 text-4xl mt-10">
+        Carregando...
+      </div>
+    );
 
   if (error) return <div className="text-center text-red-500">{error}</div>;
 

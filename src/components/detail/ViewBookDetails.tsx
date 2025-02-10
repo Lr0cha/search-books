@@ -32,8 +32,8 @@ const ViewBookDetails = ({ book, author }: BookDetailsProps) => {
           </p>
         )}
 
-        {book?.description ? (
-          <p className="mt-4 text-sm text-gray-600">{book.description}</p>
+        {book?.desc ? (
+          <p className="mt-4 text-sm text-gray-600">{book.desc}</p>
         ) : (
           <p className="mt-4 text-md text-gray-600">Sinopse não encontrada</p>
         )}
