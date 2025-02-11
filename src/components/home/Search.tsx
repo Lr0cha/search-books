@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { BsSearch } from "react-icons/bs";
 
 interface DataProps {
@@ -11,8 +11,14 @@ const Search = ({ handleSearchFunc }: DataProps) => {
   function handleInput(e: FormEvent) {
     e.preventDefault();
     handleSearchFunc(query);
-    setQuery("");
   }
+
+  useEffect(() => {
+    const textSearch = sessionStorage.getItem("SEARCH");
+    if (textSearch) {
+      setQuery(textSearch);
+    }
+  }, []);
 
   return (
     <div className="flex items-center justify-center w-full px-4">

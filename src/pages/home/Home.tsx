@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Search from "../../components/home/Search";
 import ViewBooks from "../../components/home/ViewBooks";
 
@@ -15,6 +15,8 @@ const Home = () => {
   const [search, setSearch] = useState<string>("");
   const COUNT: number = 10;
   const [offset, setOffset] = useState<number>(0);
+
+  const firstRender = useRef(true);
 
   function filteredBooks(data: any) {
     return data.docs.map((book: any) => ({
@@ -68,6 +70,22 @@ const Home = () => {
       getData(search, offset + COUNT);
     }
   };
+
+  useEffect(() => {
+    const textSearch = sessionStorage.getItem("SEARCH");
+    if (textSearch) {
+      setSearch(textSearch);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+
+    sessionStorage.setItem("SEARCH", search);
+  }, [search]);
 
   return (
     <div className="min-h-screen p-2 gap-3">
